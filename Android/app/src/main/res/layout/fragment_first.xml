@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".FirstFragment">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -30,7 +30,6 @@
         android:layout_marginStart="108dp"
         android:layout_marginTop="264dp"
         android:src="@android:drawable/ic_menu_camera"
-        android:onClick="cam_pressed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toEndOf="@+id/imageButton3"
@@ -45,13 +44,5 @@
         android:src="@android:drawable/ic_menu_gallery"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="?attr/colorPrimary"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:popupTheme="@style/AppTheme.PopupOverlay" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

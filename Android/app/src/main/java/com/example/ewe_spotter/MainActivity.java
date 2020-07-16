@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,35 +34,35 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static FragmentManager fragmentManager;
+    String currentPhotoPath;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    /** Create the File where the photo should go */
+    File photoFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_first);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        if (findViewById(R.id.fragment_container) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, new FirstFragment())
+                    .commit();
+        }
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    // Create the File where the photo should go
-    File photoFile = null;
-    public void cam_pressed(View view) {
+    public void requestImageActivity(){
         // Called when cam button pressed; stages intent for image capture
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         // Ensure that there's a camera activity to handle the intent
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-
+        //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
         try {
             photoFile = createImageFile();
         } catch (IOException ex) {
@@ -79,13 +80,8 @@ public class MainActivity extends AppCompatActivity {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
-
-//        } else {
-//            Log.i(TAG, "No camera app");
-//        }
     }
 
-    String currentPhotoPath;
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -106,48 +102,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            setContentView(R.layout.fragment_second);
-            setPic();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container,
+                    new SecondFragment(), "sf")
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
-    private void setPic() {
-        // Get the dimensions of the View
-        EditImage imageView = findViewById(R.id.cropBox);
 
-        Resources res = getResources();
-        float width = res.getDimension(R.dimen.thumbnail);
-        float height = res.getDimension(R.dimen.thumbnail);
-
-        int targetW = (int) width; //imageView.getWidth();
-        int targetH = (int) height; //imageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
-        imageView.setImageBitmap(bitmap);
-    }
-
-    public void process_image(View view) throws IOException {
+    public void process_image() throws IOException {
         EditImage imageView = findViewById(R.id.cropBox);
         Bitmap userPrepBitmap = imageView.outputImage();
         Log.i(TAG, "Bitmap expported");
         SheepNet network = new SheepNet(this, SheepNet.Device.CPU, 1);
         int idIndex = network.recognizeImage(userPrepBitmap);
         Log.i(TAG, "process_image: " + idIndex);
+    }
+
+    public String getCurrentPhotoPath(){
+        return currentPhotoPath;
     }
 
 //    @Override

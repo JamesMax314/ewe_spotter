@@ -74,11 +74,13 @@ public class EditImage extends View {
         bottom = height;
         canvas.clipRect(left, top,
                 right, bottom);
-        Bitmap imgBitmapNew =
-                Bitmap.createScaledBitmap(imgBitmap, (int) (imgBitmap.getWidth()*scale),
-                        (int) (imgBitmap.getHeight()*scale),
-                        false);
-        canvas.drawBitmap(imgBitmapNew, xPos+xScale, yPos+yScale, null);
+        if (imgBitmap != null) {
+            Bitmap imgBitmapNew =
+                    Bitmap.createScaledBitmap(imgBitmap, (int) (imgBitmap.getWidth() * scale),
+                            (int) (imgBitmap.getHeight() * scale),
+                            false);
+            canvas.drawBitmap(imgBitmapNew, xPos + xScale, yPos + yScale, null);
+        }
     }
 
     private void drawBox(Canvas canvas){

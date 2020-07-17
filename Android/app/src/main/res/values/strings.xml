@@ -10,4 +10,6 @@
     <string name="hello_first_fragment">Lemons</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="identify">Identify</string>
+    <string name="release">Release</string>
+    <string name="save">Save</string>
 </resources>

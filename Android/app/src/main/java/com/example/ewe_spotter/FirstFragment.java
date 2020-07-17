@@ -33,6 +33,7 @@ public class FirstFragment extends Fragment implements View.OnClickListener {
 
     /** private so can only be accessed by instance of class */
     private ImageButton cam_button;
+    private ImageButton gallary_button;
     private View view;
 
     @Override
@@ -41,6 +42,8 @@ public class FirstFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_first, container, false);
         cam_button = view.findViewById(R.id.cam_button);
         cam_button.setOnClickListener(this);
+        gallary_button = view.findViewById(R.id.gallary_button);
+        gallary_button.setOnClickListener(this);
         return view;
     }
 
@@ -48,8 +51,12 @@ public class FirstFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cam_button:
-                Log.i(TAG, "onClick: ");
+                Log.i(TAG, "onClick: cam_button");
                 ((MainActivity) requireActivity()).requestImageActivity();
+                break;
+            case R.id.gallary_button:
+                Log.i(TAG, "onClick: gallary_button");
+                ((MainActivity) requireActivity()).requestGalleryActivity();
         }
     }
 

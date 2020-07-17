@@ -2,6 +2,7 @@ package com.example.ewe_spotter;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
@@ -28,7 +29,11 @@ import android.widget.ImageView;
 import org.tensorflow.lite.support.model.Model;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Objects;
 
@@ -38,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
     String currentPhotoPath;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_IMAGE = 2;
     /** Create the File where the photo should go */
     File photoFile = null;
+    public Bitmap userPrepBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,23 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_container, new FirstFragment())
                     .commit();
+        }
+    }
+
+    public void requestGalleryActivity() {
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.e(TAG, "Error occurred while creating the File");
+        }
+        Log.i(TAG, "File generated");
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+            Intent getPictureIntent = new Intent();
+            getPictureIntent.setType("image/*");
+            getPictureIntent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(
+                    Intent.createChooser(getPictureIntent, "Select Picture"), PICK_IMAGE);
         }
     }
 
@@ -101,19 +125,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container,
-                    new SecondFragment(), "sf")
-                    .addToBackStack(null)
-                    .commit();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case (REQUEST_IMAGE_CAPTURE):
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container,
+                                    new SecondFragment(), "sf")
+                            .addToBackStack(null)
+                            .commit();
+                    break;
+                case (PICK_IMAGE):
+                    Log.i(TAG, "onActivityResult: pick image");
+                    Uri mediaUri = data.getData();
+                    assert mediaUri != null;
+                    String mediaPath = mediaUri.getPath();
+                    try {
+                        InputStream inputStream = getBaseContext().getContentResolver().
+                                openInputStream(mediaUri);
+                        FileOutputStream out = new FileOutputStream(currentPhotoPath);
+                        byte[] buffer = new byte[1024];
+                        assert inputStream != null;
+                        int len = inputStream.read(buffer);
+                        while (len != -1) {
+                            out.write(buffer, 0, len);
+                            len = inputStream.read(buffer);
+                        }
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container,
+                                        new SecondFragment(), "sf")
+                                .addToBackStack(null)
+                                .commit();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
         }
-    }
 
+    }
 
     public void process_image() throws IOException {
         EditImage imageView = findViewById(R.id.cropBox);
-        Bitmap userPrepBitmap = imageView.outputImage();
+        userPrepBitmap = imageView.outputImage();
         Log.i(TAG, "Bitmap expported");
         SheepNet network = new SheepNet(this, SheepNet.Device.CPU, 1);
         int idIndex = network.recognizeImage(userPrepBitmap);
@@ -122,6 +174,14 @@ public class MainActivity extends AppCompatActivity {
 
     public String getCurrentPhotoPath(){
         return currentPhotoPath;
+    }
+
+    public void initInfo(){
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container,
+                        new NewSheepFragment(), "nsf")
+                .addToBackStack(null)
+                .commit();
     }
 
 //    @Override

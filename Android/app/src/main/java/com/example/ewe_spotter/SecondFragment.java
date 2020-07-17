@@ -40,6 +40,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
                 Log.i(TAG, "onClick: ");
                 try {
                     ((MainActivity) requireActivity()).process_image();
+                    ((MainActivity) requireActivity()).initInfo();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

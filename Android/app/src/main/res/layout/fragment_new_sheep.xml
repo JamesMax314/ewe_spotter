@@ -13,10 +13,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/breedText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
             android:textSize="@dimen/title_size"/>
 
         <ImageView
@@ -26,12 +25,12 @@
             app:srcCompat="?android:attr/alertDialogIcon" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/sheepName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:text="@string/name_your_sheep" />
 
         <TextView
             android:id="@+id/textView3"

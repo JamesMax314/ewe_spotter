@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Sheep {
 
-    public Sheep(int sID, String photoPath, String sheepName) {
-        this.sID = sID;
+    public Sheep(int bID, String photoPath, String sheepName) {
+        this.bID = bID;
         this.photoPath = photoPath;
         this.sheepName = sheepName;
     }

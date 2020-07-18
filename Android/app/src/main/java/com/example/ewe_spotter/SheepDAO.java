@@ -1,6 +1,8 @@
 package com.example.ewe_spotter;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
@@ -13,4 +15,10 @@ public interface SheepDAO {
 
     @Query("SELECT * FROM Sheep")
     abstract List<Sheep> getAllSheep();
+
+    @Insert
+    void inertSheep(Sheep sheep);
+
+//    @Delete
+//    void deleteSheep(int sID);
 }

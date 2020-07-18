@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sheep_names">
+        <item>Badger Face sheep</item>
+        <item>Balwen sheep</item>
+        <item>Border Leicester sheep</item>
+        <item>Castlemilk Moorit</item>
+        <item>Cotswold sheep</item>
+        <item>Devon and Cornwall Longwool</item>
+        <item>Eppynt Hill and Beulah Speckled Face</item>
+        <item>Exmoor Horn</item>
+        <item>Greyface Dartmoor</item>
+        <item>Hebridean sheep</item>
+        <item>Herdwick sheep</item>
+        <item>Llanwenog sheep</item>
+        <item>Lleyn sheep</item>
+        <item>Lonk sheep</item>
+        <item>Manx Loaghtan</item>
+        <item>North Ronaldsay sheep</item>
+        <item>Portland sheep</item>
+        <item>Soay sheep</item>
+        <item>Southdown sheep</item>
+        <item>Suffolk sheep</item>
+        <item>Wensleydale sheep</item>
+    </string-array>
+</resources>

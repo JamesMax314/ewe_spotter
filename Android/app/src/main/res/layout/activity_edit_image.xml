@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".EditImageActivity">
 
     <include
-        android:id="@+id/include"
         layout="@layout/background" />
 
     <LinearLayout
@@ -16,7 +15,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/fragment_container"
+            android:id="@+id/fragment_container_edit_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

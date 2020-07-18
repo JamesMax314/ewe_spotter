@@ -6,23 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".FirstFragment">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradient_colour">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="-5dp"
-            android:src="@drawable/ic_fields" />
-    </RelativeLayout>
-
     <ImageButton
         android:id="@+id/cam_button"
         android:layout_width="wrap_content"

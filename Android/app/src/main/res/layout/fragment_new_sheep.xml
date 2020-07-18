@@ -7,38 +7,59 @@
     android:layout_height="match_parent">
 
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_colour"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="256dp">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="@dimen/title_size"/>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/sheepView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="-5dp"
-            android:src="@drawable/ic_fields" />
+            android:layout_height="@dimen/info_viewer_width"
+            app:srcCompat="?android:attr/alertDialogIcon" />
 
-    </RelativeLayout>
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container_sheep_info"
-        android:layout_width="@dimen/info_viewer_width"
-        android:layout_height="@dimen/info_viewer_height"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/relativeLayout2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <include
-            layout="@layout/fragment_sheep_info" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/release_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/release" />
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:shadowColor="@color/purple"/>
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

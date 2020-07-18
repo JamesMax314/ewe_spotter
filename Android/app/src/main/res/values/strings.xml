@@ -12,4 +12,5 @@
     <string name="identify">Identify</string>
     <string name="release">Release</string>
     <string name="save">Save</string>
+    <string name="processing_image">Processing Image</string>
 </resources>

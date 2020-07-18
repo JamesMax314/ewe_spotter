@@ -38,14 +38,17 @@ public class NewSheepFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.save_button:
+                // TODO: 18/07/20 save to database / update database
+                // TODO: 18/07/20 start recycler view
                 break;
             case R.id.release_button:
+                // TODO: 18/07/20 remove from database
                 break;
         }
     }
 
     private void getImage(View view){
-        Bitmap sheepImg = ((MainActivity) requireActivity()).userPrepBitmap;
+        Bitmap sheepImg = ((SaveImageActivity) requireActivity()).userBitmapSave;
         ImageView sheepShow = view.findViewById(R.id.sheepView);
         sheepShow.setImageBitmap(sheepImg);
     }

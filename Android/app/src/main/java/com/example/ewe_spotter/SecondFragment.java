@@ -35,15 +35,9 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.identify_button:
-                Log.i(TAG, "onClick: ");
-                try {
-                    ((MainActivity) requireActivity()).process_image();
-                    ((MainActivity) requireActivity()).initInfo();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (view.getId() == R.id.identify_button) {
+            Log.i(TAG, "onClick: ");
+            ((EditImageActivity) requireActivity()).initInfo();
         }
     }
 
@@ -54,7 +48,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
 
     public void setPic() {
         // Get the dimensions of the View
-        String currentPhotoPath = ((MainActivity) requireActivity()).getCurrentPhotoPath();
+        String currentPhotoPath = ((EditImageActivity) requireActivity()).getCurrentPhotoPath();
         EditImage imageView = requireActivity().findViewById(R.id.cropBox);
 
         Resources res = getResources();

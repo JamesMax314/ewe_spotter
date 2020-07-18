@@ -39,6 +39,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final String PATH_MESSAGE = "com.example.ewe_spotter.path_method";
     public static FragmentManager fragmentManager;
     String currentPhotoPath;
 
@@ -128,11 +129,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case (REQUEST_IMAGE_CAPTURE):
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container,
-                                    new SecondFragment(), "sf")
-                            .addToBackStack(null)
-                            .commit();
+                    startEditImage(currentPhotoPath);
                     break;
                 case (PICK_IMAGE):
                     Log.i(TAG, "onActivityResult: pick image");
@@ -150,11 +147,7 @@ public class MainActivity extends AppCompatActivity {
                             out.write(buffer, 0, len);
                             len = inputStream.read(buffer);
                         }
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container,
-                                        new SecondFragment(), "sf")
-                                .addToBackStack(null)
-                                .commit();
+                        startEditImage(currentPhotoPath);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -163,26 +156,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void process_image() throws IOException {
-        EditImage imageView = findViewById(R.id.cropBox);
-        userPrepBitmap = imageView.outputImage();
-        Log.i(TAG, "Bitmap expported");
-        SheepNet network = new SheepNet(this, SheepNet.Device.CPU, 1);
-        int idIndex = network.recognizeImage(userPrepBitmap);
-        Log.i(TAG, "process_image: " + idIndex);
+    private void startEditImage(String photoPath){
+        Intent intent = new Intent(this, EditImageActivity.class);
+        intent.putExtra(PATH_MESSAGE, photoPath);
+        startActivity(intent);
     }
 
     public String getCurrentPhotoPath(){
         return currentPhotoPath;
     }
 
-    public void initInfo(){
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,
-                        new NewSheepFragment(), "nsf")
-                .addToBackStack(null)
-                .commit();
-    }
+
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {

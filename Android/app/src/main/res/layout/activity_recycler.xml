@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SaveImageActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/background" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container_save"
+        android:layout_width="@dimen/info_viewer_width"
+        android:layout_height="@dimen/info_viewer_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/include"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--        <include layout="@layout/fragment_sheep_info" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,7 @@ public interface SheepDAO {
     @Query("SELECT * FROM Sheep WHERE sID=:sheep_id")
     abstract Sheep findBySID(int sheep_id);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update
     int updateSheep(Sheep sheep);
 
     @Insert

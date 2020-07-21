@@ -62,15 +62,6 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
 
         Bitmap bmp = BitmapFactory.decodeFile(sheepI.getPhotoPath());
         holder.sheepImageView.setImageBitmap(bmp);
-        holder.cv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context,"The position is:" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
     }
 
     @Override

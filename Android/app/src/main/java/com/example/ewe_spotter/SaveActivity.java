@@ -69,7 +69,11 @@ public class SaveActivity extends AppCompatActivity {
     }
 
     public void save(String name){
-        sheepInstance = new Sheep(bID, photoPath, name);
+        if (sID != -1){
+            sheepInstance.setSheepName(name);
+        } else {
+            sheepInstance = new Sheep(bID, photoPath, name);
+        }
         dbRunnable runnable = new dbRunnable(SAVE);
         new Thread(runnable).start();
     }
@@ -98,9 +102,6 @@ public class SaveActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            // TODO: 21/07/20 add switch statement for deletion addition and editing
-            // TODO: 21/07/20 edit if sID is not null
-            // TODO: 21/07/20 remove if remove button pressed
             switch (OPTION){
                 case (REMOVE):
                     if (sID != -1) {

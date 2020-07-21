@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,13 +32,13 @@ public class EditImageActivity extends AppCompatActivity {
                 return;
             }
             fragmentManagerEI.beginTransaction()
-                    .add(R.id.fragment_container_edit_image, new SecondFragment())
+                    .add(R.id.fragment_container_edit_image, new EditImageFragment())
                     .commit();
         }
     }
 
     public void initInfo(){
-        EditImage imageView = findViewById(R.id.cropBox);
+        EditImageView imageView = findViewById(R.id.cropBox);
         userPrepBitmap = imageView.outputImage();
         try (FileOutputStream out = new FileOutputStream(photoPath)) {
             userPrepBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);

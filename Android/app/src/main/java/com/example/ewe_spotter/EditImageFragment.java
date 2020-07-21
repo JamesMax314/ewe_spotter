@@ -12,23 +12,16 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.io.IOException;
-import java.util.Objects;
-
-public class SecondFragment extends Fragment implements View.OnClickListener {
+public class EditImageFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "SecondFragment";
-    private Button identify_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_second, container, false);
-        identify_button = view.findViewById(R.id.identify_button);
+        View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
+        Button identify_button = view.findViewById(R.id.identify_button);
         identify_button.setOnClickListener(this);
         return view;
     }
@@ -49,7 +42,7 @@ public class SecondFragment extends Fragment implements View.OnClickListener {
     public void setPic() {
         // Get the dimensions of the View
         String currentPhotoPath = ((EditImageActivity) requireActivity()).getCurrentPhotoPath();
-        EditImage imageView = requireActivity().findViewById(R.id.cropBox);
+        EditImageView imageView = requireActivity().findViewById(R.id.cropBox);
 
         Resources res = getResources();
         float width = res.getDimension(R.dimen.thumbnail);

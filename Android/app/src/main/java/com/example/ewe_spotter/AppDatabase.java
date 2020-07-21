@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Breed.class, Sheep.class}, version = 1)
+@Database(entities = {Sheep.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SheepDAO sheepDAO();
     private static final String DB_NAME = "app_db";
@@ -18,6 +18,7 @@ public abstract class AppDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, DB_NAME)
             .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
             .build();
         }
         return instance;

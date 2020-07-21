@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -15,10 +13,9 @@ import android.graphics.Bitmap;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MotionEventCompat;
-import androidx.core.view.ScaleGestureDetectorCompat;
 
 
-public class EditImage extends View {
+public class EditImageView extends View {
     private static final String TAG = "EditImage";
 
     float dpi;
@@ -43,11 +40,11 @@ public class EditImage extends View {
     float yScale;
 
 
-    public EditImage(Context context) {
+    public EditImageView(Context context) {
         super(context);
     }
 
-    public EditImage(Context context, AttributeSet attributeSet) {
+    public EditImageView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         dpi = context.getResources().getDisplayMetrics().density;
         setFocusable(true);
@@ -121,7 +118,7 @@ public class EditImage extends View {
     }
 
     ScaleGestureDetector detector =
-            new ScaleGestureDetector(EditImage.this.getContext(), new scaleListener());
+            new ScaleGestureDetector(EditImageView.this.getContext(), new scaleListener());
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {

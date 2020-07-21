@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    tools:context=".EditImageFragment">
 
-    <com.example.ewe_spotter.EditImage
+    <com.example.ewe_spotter.EditImageView
         android:id="@+id/cropBox"
         android:layout_width="@dimen/thumbnail"
         android:layout_height="@dimen/thumbnail"

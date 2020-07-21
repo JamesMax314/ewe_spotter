@@ -14,8 +14,6 @@ import java.io.IOException;
 
 public class IDActivity extends AppCompatActivity {
     private static final String TAG = "IDActivity";
-    public static final String BMP_PATH = "com.example.ewe_spotter.bmp_path";
-    public static final String INT_ID = "com.example.ewe_spotter.int_id";
     public Bitmap userBitmap;
     public String photoPath;
 
@@ -38,9 +36,9 @@ public class IDActivity extends AppCompatActivity {
     }
 
     public void initSave(int id){
-        Intent intent = new Intent(this, SaveImageActivity.class);
-        intent.putExtra(BMP_PATH, photoPath);
-        intent.putExtra(INT_ID, id);
+        Intent intent = new Intent(this, SaveActivity.class);
+        intent.putExtra(SaveActivity.BMP_PATH, photoPath);
+        intent.putExtra(SaveActivity.INT_BID, id);
         startActivity(intent);
     }
 

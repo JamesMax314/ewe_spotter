@@ -1,41 +1,23 @@
 package com.example.ewe_spotter;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.View;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageView;
-
-import org.tensorflow.lite.support.model.Model;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentManager;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -45,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
-    /** Create the File where the photo should go */
+    /**
+     * Create the File where the photo should go
+     */
     File photoFile = null;
     public Bitmap userPrepBitmap;
 
@@ -55,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
 
-        if (findViewById(R.id.fragment_container) != null){
-            if (savedInstanceState != null){
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
                 return;
             }
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, new FirstFragment())
+                    .add(R.id.fragment_container, new HomeFragment())
                     .commit();
         }
     }
@@ -82,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void requestImageActivity(){
+    public void requestImageActivity() {
         // Called when cam button pressed; stages intent for image capture
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -156,16 +140,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void startEditImage(String photoPath){
+    private void startEditImage(String photoPath) {
         Intent intent = new Intent(this, EditImageActivity.class);
         intent.putExtra(PATH_MESSAGE, photoPath);
         startActivity(intent);
     }
 
-    public String getCurrentPhotoPath(){
+    public String getCurrentPhotoPath() {
         return currentPhotoPath;
     }
-
 
 
 //    @Override

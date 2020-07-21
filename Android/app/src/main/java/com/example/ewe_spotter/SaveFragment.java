@@ -14,21 +14,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
-
-public class NewSheepFragment extends Fragment implements View.OnClickListener {
-    private Button save_button;
-    private Button release_button;
+public class SaveFragment extends Fragment implements View.OnClickListener {
     public TextView breedText;
+    public String nameText;
+    private EditText nameEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_sheep, container, false);
-        save_button = view.findViewById(R.id.save_button);
+        Button save_button = view.findViewById(R.id.save_button);
         save_button.setOnClickListener(this);
-        release_button = view.findViewById(R.id.release_button);
+        Button release_button = view.findViewById(R.id.release_button);
         release_button.setOnClickListener(this);
 
         breedText = view.findViewById(R.id.breedText);
@@ -39,30 +37,37 @@ public class NewSheepFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         getImage(requireView());
         Resources res = getResources();
-        int breedId = ((SaveImageActivity) requireActivity()).intId;
+        int breedId = ((SaveActivity) requireActivity()).bID;
         breedText.setText(res.getTextArray(R.array.sheep_names)[breedId]);
+        nameEdit = requireView().findViewById(R.id.sheepName);
+
+        String name = ((SaveActivity) requireActivity()).getNameString();
+        if (name != null){
+            setNameText(name);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.save_button:
-                EditText nameEdit = requireView().findViewById(R.id.sheepName);
-                String nameText = nameEdit.getText().toString();
-                ((SaveImageActivity) requireActivity()).save(nameText);
-                // TODO: 18/07/20 update database
-                // TODO: 18/07/20 start recycler view
+                nameText = nameEdit.getText().toString();
+                ((SaveActivity) requireActivity()).save(nameText);
                 break;
             case R.id.release_button:
-                ((SaveImageActivity) requireActivity()).release();
-                // TODO: 18/07/20 remove from database
+                ((SaveActivity) requireActivity()).release();
                 break;
         }
     }
 
     private void getImage(View view){
-        Bitmap sheepImg = ((SaveImageActivity) requireActivity()).userBitmapSave;
+        Bitmap sheepImg = ((SaveActivity) requireActivity()).userBitmapSave;
         ImageView sheepShow = view.findViewById(R.id.sheepView);
         sheepShow.setImageBitmap(sheepImg);
+    }
+
+    public void setNameText(String nameText) {
+        this.nameText = nameText;
+        nameEdit.setText(nameText);
     }
 }

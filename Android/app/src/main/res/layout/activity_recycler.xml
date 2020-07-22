@@ -10,6 +10,10 @@
 <!--        android:id="@+id/include"-->
 <!--        layout="@layout/background" />-->
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sheepRecycler"
         android:layout_width="match_parent"

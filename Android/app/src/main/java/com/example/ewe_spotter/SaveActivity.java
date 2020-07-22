@@ -1,6 +1,7 @@
 package com.example.ewe_spotter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -8,9 +9,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 public class SaveActivity extends AppCompatActivity {
+    // TODO: 21/07/20 perhapse use flags with intent
 
     public static final String BMP_PATH = "com.example.ewe_spotter.bmp_path";
     public static final String INT_BID = "com.example.ewe_spotter.int_bid";
@@ -39,6 +45,9 @@ public class SaveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_save);
 
         fragmentManagerSave = getSupportFragmentManager();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (findViewById(R.id.fragment_container_save) != null){
             if (savedInstanceState != null){
@@ -132,6 +141,45 @@ public class SaveActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id){
+            case (R.id.home):
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case (R.id.gallery):
+                Intent intentGal = new Intent(this, MainActivity.class);
+                intentGal.putExtra(MainActivity.CAMERA_OPTION, MainActivity.GALLERY);
+                intentGal.setFlags(intentGal.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intentGal);
+                break;
+            case (R.id.camera):
+                Intent intentCam = new Intent(this, MainActivity.class);
+                intentCam.putExtra(MainActivity.CAMERA_OPTION, MainActivity.CAMERA);
+                intentCam.setFlags(intentCam.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intentCam);
+                break;
+            case (R.id.herd):
+                Intent intentHerd = new Intent(this, RecyclerActivity.class);
+                startActivity(intentHerd);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     public String getNameString() {
         return nameString;
     }

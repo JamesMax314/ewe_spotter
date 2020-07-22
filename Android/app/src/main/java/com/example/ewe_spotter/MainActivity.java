@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 
@@ -22,6 +25,10 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static final String PATH_MESSAGE = "com.example.ewe_spotter.path_method";
+    public static final String CAMERA_OPTION = "com.example.ewe_spotter.";
+    public static final int NULL_OPTION = 0;
+    public static final int CAMERA = 1;
+    public static final int GALLERY = 2;
     public static FragmentManager fragmentManager;
     String currentPhotoPath;
 
@@ -36,8 +43,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        int initOption = intent.getIntExtra(CAMERA_OPTION, NULL_OPTION);
+        if (initOption == CAMERA){
+            requestImageActivity();
+        } else if (initOption == GALLERY){
+            requestGalleryActivity();
+        }
+
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
@@ -64,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(
                     Intent.createChooser(getPictureIntent, "Select Picture"), PICK_IMAGE);
         }
+    }
+
+    public void requestRecyclerActivity(){
+        Intent intentHerd = new Intent(this, RecyclerActivity.class);
+        startActivity(intentHerd);
     }
 
     public void requestImageActivity() {
@@ -151,25 +174,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id){
+            case (R.id.camera):
+                requestImageActivity();
+                break;
+            case (R.id.gallery):
+                requestGalleryActivity();
+                break;
+            case (R.id.herd):
+                requestRecyclerActivity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

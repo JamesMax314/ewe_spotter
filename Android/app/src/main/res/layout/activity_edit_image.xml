@@ -14,6 +14,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
         <FrameLayout
             android:id="@+id/fragment_container_edit_image"
             android:layout_width="match_parent"

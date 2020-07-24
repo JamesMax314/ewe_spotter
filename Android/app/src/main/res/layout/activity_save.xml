@@ -10,21 +10,30 @@
         android:id="@+id/include"
         layout="@layout/background" />
 
+
+
+<!--        <include layout="@layout/fragment_sheep_info" />-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="10dp">
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
     <FrameLayout
         android:id="@+id/fragment_container_save"
-        android:layout_width="@dimen/info_viewer_width"
-        android:layout_height="@dimen/info_viewer_height"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/include"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-<!--        <include layout="@layout/fragment_sheep_info" />-->
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

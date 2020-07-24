@@ -5,4 +5,5 @@
     <dimen name="info_viewer_width">300dp</dimen>
     <dimen name="info_viewer_height">600dp</dimen>
     <dimen name="title_size">35sp</dimen>
+    <dimen name="margin">8dp</dimen>
 </resources>

@@ -30,24 +30,37 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/identify"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="387dp" />
+    <ImageButton
+        android:id="@+id/rotate_left"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/ic_baseline_rotate_left_24"
+        app:layout_constraintStart_toStartOf="@id/cropBox"
+        app:layout_constraintTop_toBottomOf="@id/cropBox"/>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="265dp"
-        tools:layout_editor_absoluteY="389dp" />
+    <ImageButton
+        android:id="@+id/rotate_right"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/ic_baseline_rotate_right_24"
+        app:layout_constraintEnd_toEndOf="@id/cropBox"
+        app:layout_constraintTop_toBottomOf="@id/cropBox"/>
+
+    <ImageButton
+        android:id="@+id/reset"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="@dimen/margin"
+        android:background="@drawable/ic_baseline_cached_24"
+        app:layout_constraintBottom_toBottomOf="@+id/rotate_right"
+        app:layout_constraintEnd_toStartOf="@+id/rotate_right"
+        app:layout_constraintStart_toEndOf="@+id/rotate_left" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

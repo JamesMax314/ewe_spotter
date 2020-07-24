@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,12 +19,14 @@ import androidx.core.view.MotionEventCompat;
 public class EditImageView extends View {
     private static final String TAG = "EditImage";
 
+    private Handler mainHandler = new Handler();
+
     float dpi;
 
     private float left;
-    private float right;
+    private float width;
     private float top;
-    private float bottom;
+    private float height;
     float xPos = 0;
     float yPos = 0;
     private Bitmap imgBitmap;
@@ -38,6 +41,9 @@ public class EditImageView extends View {
     float focusY;
     float xScale;
     float yScale;
+
+    float bitmapWidth;
+    float bitmapHeight;
 
 
     public EditImageView(Context context) {
@@ -58,23 +64,24 @@ public class EditImageView extends View {
         super.onDraw(canvas);
         drawClippedRectangle(canvas);
         drawBox(canvas);
+        left = 0;
+        width = getWidth();
+        top = 0;
+        height = getHeight();
     }
 
     private void drawClippedRectangle(Canvas canvas) {
         // Set the boundaries of the clipping rectangle for whole picture.
         Resources res = getResources();
-        float width = res.getDimension(R.dimen.thumbnail);
-        float height = res.getDimension(R.dimen.thumbnail);
-        left = 0;
-        right = width;
-        top = 0;
-        bottom = height;
-        canvas.clipRect(left, top,
-                right, bottom);
+
+        bitmapWidth = imgBitmap.getWidth() * scale;
+        bitmapHeight = imgBitmap.getHeight() * scale;
+//        canvas.clipRect(left, top,
+//                right, bottom);
         if (imgBitmap != null) {
             Bitmap imgBitmapNew =
-                    Bitmap.createScaledBitmap(imgBitmap, (int) (imgBitmap.getWidth() * scale),
-                            (int) (imgBitmap.getHeight() * scale),
+                    Bitmap.createScaledBitmap(imgBitmap, (int) (bitmapWidth),
+                            (int) (bitmapHeight),
                             false);
             canvas.drawBitmap(imgBitmapNew, xPos + xScale, yPos + yScale, null);
         }
@@ -82,8 +89,6 @@ public class EditImageView extends View {
 
     private void drawBox(Canvas canvas){
         Resources res = getResources();
-        float width = res.getDimension(R.dimen.thumbnail);
-        float height = res.getDimension(R.dimen.thumbnail);
         Paint p = new Paint();
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(res.getDimension(R.dimen.line_width));
@@ -142,39 +147,142 @@ public class EditImageView extends View {
                         MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                 final float x = MotionEventCompat.getX(ev, pointerIndex);
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
+                double expDecayX = 1;
+                double expDecayY = 1;
+                double expScale = 1e-2;
+
+                // TODO: 23/07/20 change width and height to bitmap width and height
+                if (xPos > 0){
+                    expDecayX = Math.exp(-Math.abs(xPos)*expScale);
+                } else if (xPos < -(bitmapWidth-width)){
+                    expDecayX = Math.exp(-Math.abs(xPos + (bitmapWidth-width))*expScale);
+                }
+                if (yPos > 0){
+                    expDecayY = Math.exp(-Math.abs(yPos)*expScale);
+                } else if (yPos < -(bitmapHeight-height)){
+                    expDecayY = Math.exp(-Math.abs(yPos + (bitmapHeight-height))*expScale);
+                }
 
                 // Calculate the distance moved
                 final float dx = x - dragBeginX;
                 final float dy = y - dragBeginY;
 
-                yPos += dy;
-                xPos += dx;
+                yPos += dy*expDecayY;
+                xPos += dx*expDecayX;
 
                 dragBeginX = x;
                 dragBeginY = y;
 
                 invalidate();
                 break;
+            case MotionEvent.ACTION_UP:
+                timeRunnable runnableX = new timeRunnable(timeRunnable.X_POS,
+                        100, xPos, 0, 100);
+                new Thread(runnableX).start();
+                timeRunnable runnableY = new timeRunnable(timeRunnable.Y_POS,
+                        100, yPos, 0, 100);
+                new Thread(runnableY).start();
+                timeRunnable runnableXFar = new timeRunnable(timeRunnable.X_POS,
+                        100, xPos, -(bitmapWidth-width), 100);
+                new Thread(runnableXFar).start();
+                timeRunnable runnableYFar = new timeRunnable(timeRunnable.Y_POS,
+                        100, yPos, -(bitmapHeight-height), 100);
+                new Thread(runnableYFar).start();
         }
         return true;
     }
 
+    public void updateFrame(){
+        invalidate();
+    }
+
     public Bitmap outputImage(){
-        Resources res = getResources();
-        float width = res.getDimension(R.dimen.thumbnail);
-        float height = res.getDimension(R.dimen.thumbnail);
+        // Scale bitmap
         Bitmap imgBitmapNew =
                 Bitmap.createScaledBitmap(imgBitmap, (int) (imgBitmap.getWidth()*scale),
                         (int) (imgBitmap.getHeight()*scale), false);
-        imgBitmapNew = Bitmap.createBitmap(imgBitmapNew, (int) (xPos+xScale),
-                (int) (yPos+yScale), (int) (width), (int) (height));
+        // Crop bitmap
+        imgBitmapNew = Bitmap.createBitmap(imgBitmapNew, (int) -(xPos+xScale),
+                (int) -(yPos+yScale), (int) (width), (int) (height));
         return imgBitmapNew;
+    }
+
+    // TODO: 23/07/20 create new thread for animation timing
+    class timeRunnable implements Runnable{
+        public static final int X_POS = 0;
+        public static final int Y_POS = 1;
+        public static final int SCALE = 2;
+        long period;
+        int value;
+        float current;
+        float desired;
+        int samples;
+        long startTime;
+        long lastTime;
+        long interval;
+        float amplitude;
+        timeRunnable(int value, long period, float current, float desired, int samples){
+            this.value = value;
+            this.period = period;
+            this.current = current;
+            this.desired = desired;
+            this.samples = samples;
+            interval = period/samples;
+            amplitude = current - desired;
+        }
+
+        private float f(long time){
+            long deltaTime = time - startTime;
+            return (float) ((float) amplitude * Math.cos(deltaTime*2*Math.PI/(4*period)));
+        }
+
+        @Override
+        public void run() {
+            startTime = System.currentTimeMillis();
+            lastTime = startTime;
+            switch (getValue()){
+                case X_POS:
+                    while (xPos < desired){
+                        long time = System.currentTimeMillis();
+                        if ((time - lastTime) > interval){
+                            lastTime = time;
+                            xPos = f(time);
+
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateFrame();
+                                }
+                            });
+                        }
+                    }
+                case Y_POS:
+                    while (yPos < desired){
+                        long time = System.currentTimeMillis();
+                        if ((time - lastTime) > interval){
+                            lastTime = time;
+                            yPos = f(time);
+
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateFrame();
+                                }
+                            });
+                        }
+
+                }
+            }
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     public float getScale(){
         return scale;
     }
-
 
     public float getxPos(){
         return xPos;

@@ -1,19 +1,18 @@
 package com.example.ewe_spotter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.graphics.Bitmap;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MotionEventCompat;
 
 
 public class EditImageView extends View {
@@ -39,6 +38,8 @@ public class EditImageView extends View {
     private float dragBeginX;
     private float dragBeginY;
 
+    double expScale = 1e-2;
+
     float scaleFactor = 1.f;
     float scale = 1.f;
     float focusX;
@@ -46,10 +47,18 @@ public class EditImageView extends View {
     float xScale;
     float yScale;
 
+    float scaleXPos;
+    float scaleYPos;
+
     float bitmapWidth;
     float bitmapHeight;
 
     boolean runAnimation;
+    boolean scaling = false;
+
+    int numPointers;
+
+    private ScaleGestureDetector detector;
 
 
     public EditImageView(Context context) {
@@ -59,6 +68,7 @@ public class EditImageView extends View {
     public EditImageView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         dpi = context.getResources().getDisplayMetrics().density;
+        detector = new ScaleGestureDetector(context, new scaleListener());
         setFocusable(true);
     }
 
@@ -66,22 +76,25 @@ public class EditImageView extends View {
         imgBitmap = bitmap;
     }
 
+    @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        drawClippedRectangle(canvas);
-        drawBox(canvas);
         left = 0;
         width = getWidth();
         top = 0;
         height = getHeight();
+        bitmapWidth = imgBitmap.getWidth() * scale;
+        bitmapHeight = imgBitmap.getHeight() * scale;
+
+        drawClippedRectangle(canvas);
+        drawBox(canvas);
     }
 
     private void drawClippedRectangle(Canvas canvas) {
         // Set the boundaries of the clipping rectangle for whole picture.
         Resources res = getResources();
 
-        bitmapWidth = imgBitmap.getWidth() * scale;
-        bitmapHeight = imgBitmap.getHeight() * scale;
+
 //        canvas.clipRect(left, top,
 //                right, bottom);
         if (imgBitmap != null) {
@@ -102,38 +115,10 @@ public class EditImageView extends View {
         canvas.drawRect(0, 0, width, height, p);
     }
 
-    class scaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-//        private PointF viewportFocus = new PointF();
-        private float lastSpan;
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
-            lastSpan = scaleGestureDetector.getCurrentSpan();
-            focusX = scaleGestureDetector.getFocusX();
-            focusY = scaleGestureDetector.getFocusY();
-            return true;
-        }
-
-        @Override
-        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
-
-            scale = scaleFactor*(scaleGestureDetector.getCurrentSpan()/lastSpan);
-//            Log.i(TAG, String.valueOf(span));
-
-            xScale =  (focusX - scale * focusX);
-            yScale = (focusY - scale * focusY);
-
-            Log.i(TAG, String.valueOf(dpi));
-            return true;
-        }
-    }
-
-    ScaleGestureDetector detector =
-            new ScaleGestureDetector(EditImageView.this.getContext(), new scaleListener());
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        final int action = MotionEventCompat.getActionMasked(ev);
+        final int action = ev.getActionMasked();
         detector.onTouchEvent(ev);
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
@@ -143,25 +128,33 @@ public class EditImageView extends View {
                 wVel = 0;
                 hVel = 0;
 
-                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                final float x = MotionEventCompat.getX(ev, pointerIndex);
-                final float y = MotionEventCompat.getY(ev, pointerIndex);
+//                numPointers = ev.getPointerCount();
+
+                final int pointerIndex = ev.getActionIndex();
+                final float x = ev.getX(pointerIndex);
+                final float y = ev.getY(pointerIndex);
 
                 // Remember where we started (for dragging)
                 dragBeginX = x;
                 dragBeginY = y;
                 // Save the ID of this pointer (for dragging)
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                mActivePointerId = ev.getPointerId(0);
                 break;
             }
             case MotionEvent.ACTION_MOVE:
-                final int pointerIndex =
-                        MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-                final float x = MotionEventCompat.getX(ev, pointerIndex);
-                final float y = MotionEventCompat.getY(ev, pointerIndex);
+                float x;
+                float y;
+                if (scaling){
+                    x = scaleXPos;
+                    y = scaleYPos;
+                } else {
+                    final int pointerIndex =
+                            ev.findPointerIndex(mActivePointerId);
+                    x = ev.getX(pointerIndex);
+                    y = ev.getY(pointerIndex);
+                }
                 double expDecayX = 1;
                 double expDecayY = 1;
-                double expScale = 1e-2;
 
                 // TODO: 23/07/20 change width and height to bitmap width and height
                 if (xPos > 0){
@@ -209,6 +202,48 @@ public class EditImageView extends View {
         return imgBitmapNew;
     }
 
+    private class scaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        //        private PointF viewportFocus = new PointF();
+        private float lastSpan;
+        private float lastScale;
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            lastSpan = scaleGestureDetector.getCurrentSpan();
+            focusX = scaleGestureDetector.getFocusX();
+            focusY = scaleGestureDetector.getFocusY();
+            dragBeginX = focusX;
+            dragBeginY = focusY;
+            lastScale = 1;
+            scaling = true;
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            float currentSpan = scaleGestureDetector.getCurrentSpan();
+            scale = scaleFactor*(currentSpan/lastSpan);
+            focusX = scaleGestureDetector.getFocusX();
+            focusY = scaleGestureDetector.getFocusY();
+            scaleXPos = focusX;
+            scaleYPos = focusY;
+
+            xScale = scale; //  (focusX - scale * focusX);
+            yScale = scale; //  (focusY - scale * focusY);
+            float relScale = scale / lastScale;
+            xPos -= (-xPos + focusX) * relScale + xPos - focusX;
+            yPos -= (-yPos + focusY) * relScale + yPos - focusY;
+            lastScale = scale;
+            invalidate();
+//            lastSpan = currentSpan;
+            return true;
+        }
+        @Override
+        public void onScaleEnd(ScaleGestureDetector scaleGestureDetector){
+            scaling = false;
+        }
+    }
+
     // TODO: 23/07/20 create new thread for animation timing
     class timeRunnable implements Runnable{
         int value;
@@ -231,44 +266,52 @@ public class EditImageView extends View {
         public void run() {
             startTime = System.currentTimeMillis();
             lastTime = startTime;
-            boolean stopX = false;
-            boolean stopY = false;
+            boolean stop = false;
             while (runAnimation) {
                 long time = System.currentTimeMillis();
                 if ((time - lastTime) > interval) {
+                    stop = true;
                     if (bitmapWidth < width) {
                         float wAcc = f(bitmapWidth, width);
                         wVel += wAcc * interval;
-                        bitmapWidth += wVel * interval;
-                    } else if (xPos > 0) {
+                        float newBitmapWidth = bitmapWidth + wVel * interval;
+                        scale = scale * newBitmapWidth / bitmapWidth;
+                        stop = false;
+                    }
+                    if (xPos > 0) {
                         float xAcc = f(xPos, 0);
                         xVel += xAcc * interval;
                         xPos += xVel * interval;
-                    } else if (xPos < -(bitmapWidth - width)) {
+                        stop = false;
+                    }
+                    if (xPos < -(bitmapWidth - width)) {
                         float xAcc = f(xPos, -(bitmapWidth - width));
                         xVel += xAcc * interval;
                         xPos += xVel * interval;
-                    } else {
-                        stopX = true;
+                        stop = false;
                     }
 
                     if (bitmapHeight < height) {
                         float hAcc = f(bitmapHeight, height);
                         hVel += hAcc * interval;
-                        bitmapHeight += hVel * interval;
-                    } else if (yPos > 0) {
+                        float newBitmapHeight = bitmapHeight + hVel * interval;
+                        scale = scale * newBitmapHeight / bitmapHeight;
+                        stop = false;
+                    }
+                    if (yPos > 0) {
                         float yAcc = f(yPos, 0);
                         yVel += yAcc * interval;
                         yPos += yVel * interval;
-                    } else if (yPos < -(bitmapHeight - height)) {
+                        stop = false;
+                    }
+                    if (yPos < -(bitmapHeight - height)) {
                         float yAcc = f(yPos, -(bitmapHeight - height));
                         yVel += yAcc * interval;
                         yPos += yVel * interval;
-                    } else {
-                        stopY = true;
+                        stop = false;
                     }
 
-                    if (stopX && stopY){
+                    if (stop){
                         runAnimation = false;
                     } else {
                         mainHandler.post(new Runnable() {

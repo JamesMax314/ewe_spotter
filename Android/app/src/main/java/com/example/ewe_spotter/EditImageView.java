@@ -29,6 +29,10 @@ public class EditImageView extends View {
     private float height;
     float xPos = 0;
     float yPos = 0;
+    float xVel = 0;
+    float yVel = 0;
+    float wVel = 0;
+    float hVel = 0;
     private Bitmap imgBitmap;
 
     private int mActivePointerId;
@@ -44,6 +48,8 @@ public class EditImageView extends View {
 
     float bitmapWidth;
     float bitmapHeight;
+
+    boolean runAnimation;
 
 
     public EditImageView(Context context) {
@@ -131,6 +137,12 @@ public class EditImageView extends View {
         detector.onTouchEvent(ev);
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
+                runAnimation = false;
+                xVel = 0;
+                yVel = 0;
+                wVel = 0;
+                hVel = 0;
+
                 final int pointerIndex = MotionEventCompat.getActionIndex(ev);
                 final float x = MotionEventCompat.getX(ev, pointerIndex);
                 final float y = MotionEventCompat.getY(ev, pointerIndex);
@@ -176,17 +188,7 @@ public class EditImageView extends View {
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                timeRunnable runnableX = new timeRunnable(timeRunnable.X_POS,
-                        100, xPos, 0, 100);
-                new Thread(runnableX).start();
-                timeRunnable runnableY = new timeRunnable(timeRunnable.Y_POS,
-                        100, yPos, 0, 100);
-                new Thread(runnableY).start();
-                timeRunnable runnableXFar = new timeRunnable(timeRunnable.X_POS,
-                        100, xPos, -(bitmapWidth-width), 100);
-                new Thread(runnableXFar).start();
-                timeRunnable runnableYFar = new timeRunnable(timeRunnable.Y_POS,
-                        100, yPos, -(bitmapHeight-height), 100);
+                timeRunnable runnableYFar = new timeRunnable(1000 , 100);
                 new Thread(runnableYFar).start();
         }
         return true;
@@ -209,68 +211,74 @@ public class EditImageView extends View {
 
     // TODO: 23/07/20 create new thread for animation timing
     class timeRunnable implements Runnable{
-        public static final int X_POS = 0;
-        public static final int Y_POS = 1;
-        public static final int SCALE = 2;
-        long period;
         int value;
-        float current;
-        float desired;
-        int samples;
         long startTime;
         long lastTime;
         long interval;
-        float amplitude;
-        timeRunnable(int value, long period, float current, float desired, int samples){
-            this.value = value;
-            this.period = period;
-            this.current = current;
-            this.desired = desired;
-            this.samples = samples;
+        float constant;
+
+        timeRunnable(long period, int samples){
+            runAnimation = true;
             interval = period/samples;
-            amplitude = current - desired;
+            constant = (float) Math.pow((4*2*Math.PI/period), 2);
         }
 
-        private float f(long time){
-            long deltaTime = time - startTime;
-            return (float) ((float) amplitude * Math.cos(deltaTime*2*Math.PI/(4*period)));
+        private float f(float current, float natural){
+            return -constant*(current-natural);
         }
 
         @Override
         public void run() {
             startTime = System.currentTimeMillis();
             lastTime = startTime;
-            switch (getValue()){
-                case X_POS:
-                    while (xPos < desired){
-                        long time = System.currentTimeMillis();
-                        if ((time - lastTime) > interval){
-                            lastTime = time;
-                            xPos = f(time);
-
-                            mainHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateFrame();
-                                }
-                            });
-                        }
+            boolean stopX = false;
+            boolean stopY = false;
+            while (runAnimation) {
+                long time = System.currentTimeMillis();
+                if ((time - lastTime) > interval) {
+                    if (bitmapWidth < width) {
+                        float wAcc = f(bitmapWidth, width);
+                        wVel += wAcc * interval;
+                        bitmapWidth += wVel * interval;
+                    } else if (xPos > 0) {
+                        float xAcc = f(xPos, 0);
+                        xVel += xAcc * interval;
+                        xPos += xVel * interval;
+                    } else if (xPos < -(bitmapWidth - width)) {
+                        float xAcc = f(xPos, -(bitmapWidth - width));
+                        xVel += xAcc * interval;
+                        xPos += xVel * interval;
+                    } else {
+                        stopX = true;
                     }
-                case Y_POS:
-                    while (yPos < desired){
-                        long time = System.currentTimeMillis();
-                        if ((time - lastTime) > interval){
-                            lastTime = time;
-                            yPos = f(time);
 
-                            mainHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateFrame();
-                                }
-                            });
-                        }
+                    if (bitmapHeight < height) {
+                        float hAcc = f(bitmapHeight, height);
+                        hVel += hAcc * interval;
+                        bitmapHeight += hVel * interval;
+                    } else if (yPos > 0) {
+                        float yAcc = f(yPos, 0);
+                        yVel += yAcc * interval;
+                        yPos += yVel * interval;
+                    } else if (yPos < -(bitmapHeight - height)) {
+                        float yAcc = f(yPos, -(bitmapHeight - height));
+                        yVel += yAcc * interval;
+                        yPos += yVel * interval;
+                    } else {
+                        stopY = true;
+                    }
 
+                    if (stopX && stopY){
+                        runAnimation = false;
+                    } else {
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateFrame();
+                            }
+                        });
+                        lastTime = time;
+                    }
                 }
             }
         }

@@ -23,6 +23,13 @@ def gen_labels(labels, dir):
     for label in classes:
         f.write(label + "\n")
 
+def gen_labels_xml(labels, dir):
+    classes = pkl.load(open(labels, "rb"))
+    f = open(dir, "w")
+    f.write("<string-array name=\"sheep_names\">" + "\n")
+    for label in classes:
+        f.write("<item>" + label + "</item>" + "\n")
+    f.write("</string-array>")
 
 if __name__ == "__main__":
     modelDir = "./trainedModels/"
@@ -31,7 +38,9 @@ if __name__ == "__main__":
     modelFile = modelDir + str(sys.argv[1])
     liteFile = liteDir + str(sys.argv[1]) + ".tflite"
     liteLabels = liteDir + str(sys.argv[1]) + "_labels" + ".txt"
-    mTfLiteModel = convert(modelFile)
-    save_lite(mTfLiteModel, liteFile)
-    gen_labels(labels, liteLabels)
+    liteLabelsXml = liteDir + str(sys.argv[1]) + "_labels_xml" + ".txt"
+    # mTfLiteModel = convert(modelFile)
+    # save_lite(mTfLiteModel, liteFile)
+    # gen_labels(labels, liteLabels)
+    gen_labels_xml(labels, liteLabelsXml)
 

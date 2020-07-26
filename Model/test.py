@@ -9,7 +9,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 import pickle as pkl
 import matplotlib.pyplot as plt
 
-imgN = "./Data/" + str(sys.argv[1])
+imgN = "./Verify/Badger Face sheep/Samson-Torwen-ram.jpg"
 img = image = load_img(imgN, target_size=(224, 224))
 img = img_to_array(img)
 img = preprocess_input(img)

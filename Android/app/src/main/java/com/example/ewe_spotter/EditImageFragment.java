@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,21 +17,49 @@ import androidx.fragment.app.Fragment;
 public class EditImageFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "SecondFragment";
 
+    EditImageView editImageView;
+
+    Button identify_button;
+    ImageButton rotate_left;
+    ImageButton rotate_right;
+    ImageButton reset;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
-        Button identify_button = view.findViewById(R.id.identify_button);
+
+        editImageView = view.findViewById(R.id.cropBox);
+
+        identify_button = view.findViewById(R.id.identify_button);
+        rotate_left = view.findViewById(R.id.rotate_left);
+        rotate_right = view.findViewById(R.id.rotate_right);
+        reset = view.findViewById(R.id.reset);
+
         identify_button.setOnClickListener(this);
+        rotate_left.setOnClickListener(this);
+        rotate_right.setOnClickListener(this);
+        reset.setOnClickListener(this);
+
         return view;
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.identify_button) {
-            Log.i(TAG, "onClick: ");
-            ((EditImageActivity) requireActivity()).initInfo();
+        switch (view.getId()){
+            case R.id.identify_button:
+                ((EditImageActivity) requireActivity()).initInfo();
+                break;
+            case R.id.rotate_left:
+                editImageView.rotate(EditImageView.LEFT);
+                break;
+            case R.id.rotate_right:
+                editImageView.rotate(EditImageView.RIGHT);
+                break;
+            case R.id.reset:
+                editImageView.reset();
+                break;
         }
     }
 

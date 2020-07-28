@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -19,6 +20,9 @@ public class EditImageView extends View {
     private static final String TAG = "EditImage";
 
     private Handler mainHandler = new Handler();
+
+    public static int RIGHT = 1;
+    public static int LEFT = 2;
 
     float dpi;
 
@@ -56,7 +60,7 @@ public class EditImageView extends View {
     boolean runAnimation;
     boolean scaling = false;
 
-    int numPointers;
+    private int angle;
 
     private ScaleGestureDetector detector;
 
@@ -85,6 +89,11 @@ public class EditImageView extends View {
         height = getHeight();
         bitmapWidth = imgBitmap.getWidth() * scale;
         bitmapHeight = imgBitmap.getHeight() * scale;
+//        if (Math.cos(Math.PI * angle / 180) < 0.1){
+//            float temp = bitmapHeight;
+//            bitmapHeight = bitmapWidth;
+//            bitmapWidth = temp;
+//        }
 
         drawClippedRectangle(canvas);
         drawBox(canvas);
@@ -93,8 +102,9 @@ public class EditImageView extends View {
     private void drawClippedRectangle(Canvas canvas) {
         // Set the boundaries of the clipping rectangle for whole picture.
         Resources res = getResources();
-
-
+        // TODO: 25/07/20 add a variable for orientation and manipulate dispayed image accordingly
+        Matrix rotMatrix = new Matrix();
+        rotMatrix.postRotate(angle);
 //        canvas.clipRect(left, top,
 //                right, bottom);
         if (imgBitmap != null) {
@@ -102,7 +112,9 @@ public class EditImageView extends View {
                     Bitmap.createScaledBitmap(imgBitmap, (int) (bitmapWidth),
                             (int) (bitmapHeight),
                             false);
-            canvas.drawBitmap(imgBitmapNew, xPos + xScale, yPos + yScale, null);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(imgBitmapNew, 0, 0,
+                    (int) (bitmapWidth), (int) (bitmapHeight), rotMatrix, true);
+            canvas.drawBitmap(rotatedBitmap, xPos + xScale, yPos + yScale, null);
         }
     }
 
@@ -113,6 +125,23 @@ public class EditImageView extends View {
         p.setStrokeWidth(res.getDimension(R.dimen.line_width));
         p.setColor(ContextCompat.getColor(getContext(), R.color.white));
         canvas.drawRect(0, 0, width, height, p);
+    }
+
+    public void rotate(int direction){
+        if (direction == RIGHT){
+            angle += 90;
+        } else if (direction == LEFT){
+            angle -= 90;
+        }
+        invalidate();
+    }
+
+    public void reset(){
+        angle = 0;
+        scale = 1;
+        xPos = -1;
+        yPos = -1;
+        invalidate();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -196,8 +225,15 @@ public class EditImageView extends View {
         Bitmap imgBitmapNew =
                 Bitmap.createScaledBitmap(imgBitmap, (int) (imgBitmap.getWidth()*scale),
                         (int) (imgBitmap.getHeight()*scale), false);
+
+        // Rotate Bitmap
+        Matrix rotMatrix = new Matrix();
+        rotMatrix.postRotate(angle);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(imgBitmapNew, 0, 0,
+                (int) (bitmapWidth), (int) (bitmapHeight), rotMatrix, true);
+
         // Crop bitmap
-        imgBitmapNew = Bitmap.createBitmap(imgBitmapNew, (int) -(xPos+xScale),
+        imgBitmapNew = Bitmap.createBitmap(rotatedBitmap, (int) -(xPos+xScale),
                 (int) -(yPos+yScale), (int) (width), (int) (height));
         return imgBitmapNew;
     }

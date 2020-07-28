@@ -93,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/sheepImageView">
+                app:layout_constraintTop_toBottomOf="@id/sheepImageView"
+                app:cardBackgroundColor="@color/haze">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/infoLable"

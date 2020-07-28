@@ -10,6 +10,7 @@ import org.tensorflow.lite.gpu.GpuDelegate;
 import org.tensorflow.lite.nnapi.NnApiDelegate;
 import org.tensorflow.lite.support.common.FileUtil;
 import org.tensorflow.lite.support.common.TensorProcessor;
+import org.tensorflow.lite.support.common.ops.NormalizeOp;
 import org.tensorflow.lite.support.image.ImageProcessor;
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.image.ops.ResizeOp;
@@ -52,7 +53,7 @@ public class SheepNet{
 
     protected SheepNet(Activity activity, Device device, int numThreads) throws IOException {
         tfliteModel = FileUtil.loadMappedFile(activity, getModelPath());
-        labels = FileUtil.loadLabels(activity, getLabelPath());
+//        labels = FileUtil.loadLabels(activity, getLabelPath());
 
         switch (device) {
             case NNAPI:
@@ -108,6 +109,7 @@ public class SheepNet{
                 maxI = i;
             }
         }
+        close();
         return maxI;
     }
 
@@ -126,12 +128,12 @@ public class SheepNet{
     }
 
     protected String getModelPath() {
-        return "m4.tflite";
+        return "m5.tflite";
     }
 
-    protected String getLabelPath() {
-        return "m4_labels.txt";
-    }
+//    protected String getLabelPath() {
+//        return "m4_labels.txt";
+//    }
 
 
 }

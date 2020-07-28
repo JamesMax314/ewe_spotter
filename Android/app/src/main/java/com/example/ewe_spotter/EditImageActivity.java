@@ -88,13 +88,13 @@ public class EditImageActivity extends AppCompatActivity {
             case (R.id.gallery):
                 Intent intentGal = new Intent(this, MainActivity.class);
                 intentGal.putExtra(MainActivity.CAMERA_OPTION, MainActivity.GALLERY);
-                intentGal.setFlags(intentGal.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                intentGal.setFlags(intentGal.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intentGal);
                 break;
             case (R.id.camera):
                 Intent intentCam = new Intent(this, MainActivity.class);
                 intentCam.putExtra(MainActivity.CAMERA_OPTION, MainActivity.CAMERA);
-                intentCam.setFlags(intentCam.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                intentCam.setFlags(intentCam.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intentCam);
                 break;
             case (R.id.herd):

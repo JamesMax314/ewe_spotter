@@ -25,7 +25,6 @@ public class IDActivity extends AppCompatActivity {
     public Bitmap userBitmap;
     public String photoPath;
 
-    private InterstitialAd interstitialAd;
 
     private Handler mainHandler = new Handler();
     public int outId;
@@ -46,13 +45,6 @@ public class IDActivity extends AppCompatActivity {
         thisActivity = this;
         netRunnable runnable = new netRunnable(userBitmap);
         new Thread(runnable).start();
-
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544~3347511713");
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        interstitialAd.loadAd(request);
     }
 
     public void initSave(int id){

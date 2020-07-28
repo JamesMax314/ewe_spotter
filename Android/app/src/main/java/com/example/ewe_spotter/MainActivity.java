@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        // TODO: 28/07/20 Only load once 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {

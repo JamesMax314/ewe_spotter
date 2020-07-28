@@ -7,16 +7,25 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.Objects;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.io.File;
 
 public class SaveActivity extends AppCompatActivity {
-    // TODO: 21/07/20 perhapse use flags with intent
+    private static final String TAG = "SaveActivity";
 
     public static final String BMP_PATH = "com.example.ewe_spotter.bmp_path";
     public static final String INT_BID = "com.example.ewe_spotter.int_bid";
@@ -38,6 +47,8 @@ public class SaveActivity extends AppCompatActivity {
 
     public Sheep sheepInstance;
 
+//    Add
+    private InterstitialAd interstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +86,25 @@ public class SaveActivity extends AppCompatActivity {
         if (sID != -1){
             sheepInstance = appDb.sheepDAO().findBySID(sID);
         }
+
+//        Advert setup
+        MobileAds.initialize(this, "\n" +
+                "ca-app-pub-5033666133057413/3834548122");
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        AdRequest request = new AdRequest.Builder().build();
+        interstitialAd.loadAd(request);
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLeftApplication() {
+                recyclerSave();
+            }
+
+            @Override
+            public void onAdClosed() {
+                recyclerSave();
+            }
+        });
     }
 
     public void save(String name){
@@ -87,7 +117,16 @@ public class SaveActivity extends AppCompatActivity {
         new Thread(runnable).start();
     }
 
-    public void recycler(){
+    public void loadAdd(){
+        if (interstitialAd.isLoaded()) {
+            interstitialAd.show();
+        } else {
+            Log.d(TAG, "The interstitial hasn't loaded yet.");
+            recyclerSave();
+        }
+    }
+
+    public void recyclerSave(){
         Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, RecyclerActivity.class);
         startActivity(intent);
@@ -98,8 +137,9 @@ public class SaveActivity extends AppCompatActivity {
         new Thread(runnable).start();
     }
 
-    public void home(){
-        Intent intent = new Intent(this, MainActivity.class);
+    public void recyclerRelease(){
+        Toast.makeText(getApplicationContext(), "deleted", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, RecyclerActivity.class);
         startActivity(intent);
     }
 
@@ -116,10 +156,12 @@ public class SaveActivity extends AppCompatActivity {
                     if (sID != -1) {
                         appDb.sheepDAO().deleteSheep(sheepInstance);
                     }
+                    File file = new File(photoPath);
+                    file.delete();
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            home();
+                            recyclerRelease();
                         }
                     });
                     break;
@@ -133,7 +175,7 @@ public class SaveActivity extends AppCompatActivity {
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            recycler();
+                            recyclerSave();
                         }
                     });
                     break;

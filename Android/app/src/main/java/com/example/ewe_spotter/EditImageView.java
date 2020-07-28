@@ -107,6 +107,7 @@ public class EditImageView extends View {
         rotMatrix.postRotate(angle);
 //        canvas.clipRect(left, top,
 //                right, bottom);
+        // TODO: 28/07/20 use matrix multiplication to change the bitmap 
         if (imgBitmap != null) {
             Bitmap imgBitmapNew =
                     Bitmap.createScaledBitmap(imgBitmap, (int) (bitmapWidth),

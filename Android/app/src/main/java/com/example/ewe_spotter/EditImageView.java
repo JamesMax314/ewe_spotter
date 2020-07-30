@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ public class EditImageView extends View {
     float wVel = 0;
     float hVel = 0;
     private Bitmap imgBitmap;
+    private Bitmap imgNewBitmap;
 
     private int mActivePointerId;
     private float dragBeginX;
@@ -57,10 +59,14 @@ public class EditImageView extends View {
     float bitmapWidth;
     float bitmapHeight;
 
+    float tmpBmpWidth;
+    float tmpBmpHeight;
+
     boolean runAnimation;
     boolean scaling = false;
 
     private int angle;
+    boolean rotating = false;
 
     private ScaleGestureDetector detector;
 
@@ -78,6 +84,7 @@ public class EditImageView extends View {
 
     public void setImageBitmap(Bitmap bitmap){
         imgBitmap = bitmap;
+        imgNewBitmap = bitmap;
     }
 
     @Override
@@ -102,20 +109,49 @@ public class EditImageView extends View {
     private void drawClippedRectangle(Canvas canvas) {
         // Set the boundaries of the clipping rectangle for whole picture.
         Resources res = getResources();
-        // TODO: 25/07/20 add a variable for orientation and manipulate dispayed image accordingly
+        // TODO: 25/07/20 add a variable for orientation and manipulate displayed image accordingly
+        float angleRad = (float) (angle * Math.PI / 180);
         Matrix rotMatrix = new Matrix();
-        rotMatrix.postRotate(angle);
+        if (rotating) {
+            rotMatrix.postScale(scale, scale);
+            rotMatrix.postTranslate((xPos + xScale), (yPos + yScale));
+            rotMatrix.postRotate(angle, width/2, height/2);
+        } else {
+            rotMatrix.postScale(scale, scale);
+            rotMatrix.postRotate(angle);
+
+//        rotMatrix.postTranslate(width, height);
+            // TODO: 29/07/20 add a unction to return the correct xPos and yPos and bmpWidth and Height
+            rotMatrix.postTranslate((xPos + xScale), (yPos + yScale));
+
 //        canvas.clipRect(left, top,
 //                right, bottom);
-        // TODO: 28/07/20 use matrix multiplication to change the bitmap 
+
+            if (angle % 360 == 90) {
+                rotMatrix.postTranslate(bitmapHeight, 0);
+                tmpBmpHeight = bitmapWidth;
+                tmpBmpWidth = bitmapHeight;
+            } else if (angle % 360 == 180) {
+                rotMatrix.postTranslate(bitmapWidth, bitmapHeight);
+            } else if (angle % 360 == 270) {
+                rotMatrix.postTranslate(0, bitmapWidth);
+                tmpBmpHeight = bitmapWidth;
+                tmpBmpWidth = bitmapHeight;
+            } else {
+                tmpBmpHeight = bitmapHeight;
+                tmpBmpWidth = bitmapWidth;
+            }
+        }
+        // TODO: 28/07/20 use matrix multiplication to change the bitmap
         if (imgBitmap != null) {
-            Bitmap imgBitmapNew =
-                    Bitmap.createScaledBitmap(imgBitmap, (int) (bitmapWidth),
-                            (int) (bitmapHeight),
-                            false);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(imgBitmapNew, 0, 0,
-                    (int) (bitmapWidth), (int) (bitmapHeight), rotMatrix, true);
-            canvas.drawBitmap(rotatedBitmap, xPos + xScale, yPos + yScale, null);
+            canvas.drawBitmap(imgBitmap, rotMatrix, null);
+//            Bitmap imgBitmapNew =
+//                    Bitmap.createScaledBitmap(imgBitmap, (int) (bitmapWidth),
+//                            (int) (bitmapHeight),
+//                            false);
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(imgBitmapNew, 0, 0,
+//                    (int) (bitmapWidth), (int) (bitmapHeight), rotMatrix, true);
+//            canvas.drawBitmap(rotatedBitmap, xPos + xScale, yPos + yScale, null);
         }
     }
 
@@ -130,9 +166,13 @@ public class EditImageView extends View {
 
     public void rotate(int direction){
         if (direction == RIGHT){
-            angle += 90;
+            rotRunnable runnableYFar = new rotRunnable(angle , angle + 90, 1000, 100);
+            new Thread(runnableYFar).start();
+//            angle += 90;
         } else if (direction == LEFT){
-            angle -= 90;
+            rotRunnable runnableYFar = new rotRunnable(angle , angle - 90, 1000, 100);
+            new Thread(runnableYFar).start();
+//            angle -= 90;
         }
         invalidate();
     }
@@ -189,13 +229,13 @@ public class EditImageView extends View {
                 // TODO: 23/07/20 change width and height to bitmap width and height
                 if (xPos > 0){
                     expDecayX = Math.exp(-Math.abs(xPos)*expScale);
-                } else if (xPos < -(bitmapWidth-width)){
-                    expDecayX = Math.exp(-Math.abs(xPos + (bitmapWidth-width))*expScale);
+                } else if (xPos < -(tmpBmpWidth-width)){
+                    expDecayX = Math.exp(-Math.abs(xPos + (tmpBmpWidth-width))*expScale);
                 }
                 if (yPos > 0){
                     expDecayY = Math.exp(-Math.abs(yPos)*expScale);
-                } else if (yPos < -(bitmapHeight-height)){
-                    expDecayY = Math.exp(-Math.abs(yPos + (bitmapHeight-height))*expScale);
+                } else if (yPos < -(tmpBmpHeight-height)){
+                    expDecayY = Math.exp(-Math.abs(yPos + (tmpBmpHeight-height))*expScale);
                 }
 
                 // Calculate the distance moved
@@ -281,6 +321,44 @@ public class EditImageView extends View {
         }
     }
 
+    class rotRunnable implements Runnable{
+        int oldAngle;
+        int newAngle;
+        int samples;
+        long startTime;
+        long lastTime;
+        long interval;
+
+        rotRunnable(int oldAngle, int newAngle, long period, int samples){
+            this.oldAngle = oldAngle;
+            this.newAngle = newAngle;
+            this.samples = samples;
+            interval = period/samples;
+        }
+
+        @Override
+        public void run() {
+            rotating = true;
+            startTime = System.currentTimeMillis();
+            lastTime = startTime;
+            long time = System.currentTimeMillis();
+            for (int i = 0; i <= samples; i++) {
+                while ((time - lastTime) < interval){
+                    time = System.currentTimeMillis();
+                }
+                lastTime = time;
+                angle = oldAngle + i*(newAngle - oldAngle) / samples;
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateFrame();
+                    }
+                });
+            }
+            rotating = false;
+        }
+    }
+
     // TODO: 23/07/20 create new thread for animation timing
     class timeRunnable implements Runnable{
         int value;
@@ -303,16 +381,17 @@ public class EditImageView extends View {
         public void run() {
             startTime = System.currentTimeMillis();
             lastTime = startTime;
+
             boolean stop = false;
             while (runAnimation) {
                 long time = System.currentTimeMillis();
                 if ((time - lastTime) > interval) {
                     stop = true;
-                    if (bitmapWidth < width) {
-                        float wAcc = f(bitmapWidth, width);
+                    if (tmpBmpWidth < width) {
+                        float wAcc = f(tmpBmpWidth, width);
                         wVel += wAcc * interval;
-                        float newBitmapWidth = bitmapWidth + wVel * interval;
-                        scale = scale * newBitmapWidth / bitmapWidth;
+                        float newBitmapWidth = tmpBmpWidth + wVel * interval;
+                        scale = scale * newBitmapWidth / tmpBmpWidth;
                         stop = false;
                     }
                     if (xPos > 0) {
@@ -321,18 +400,18 @@ public class EditImageView extends View {
                         xPos += xVel * interval;
                         stop = false;
                     }
-                    if (xPos < -(bitmapWidth - width)) {
-                        float xAcc = f(xPos, -(bitmapWidth - width));
+                    if (xPos < -(tmpBmpWidth - width)) {
+                        float xAcc = f(xPos, -(tmpBmpWidth - width));
                         xVel += xAcc * interval;
                         xPos += xVel * interval;
                         stop = false;
                     }
 
-                    if (bitmapHeight < height) {
-                        float hAcc = f(bitmapHeight, height);
+                    if (tmpBmpHeight < height) {
+                        float hAcc = f(tmpBmpHeight, height);
                         hVel += hAcc * interval;
-                        float newBitmapHeight = bitmapHeight + hVel * interval;
-                        scale = scale * newBitmapHeight / bitmapHeight;
+                        float newBitmapHeight = tmpBmpHeight + hVel * interval;
+                        scale = scale * newBitmapHeight / tmpBmpHeight;
                         stop = false;
                     }
                     if (yPos > 0) {
@@ -341,8 +420,8 @@ public class EditImageView extends View {
                         yPos += yVel * interval;
                         stop = false;
                     }
-                    if (yPos < -(bitmapHeight - height)) {
-                        float yAcc = f(yPos, -(bitmapHeight - height));
+                    if (yPos < -(tmpBmpHeight - height)) {
+                        float yAcc = f(yPos, -(tmpBmpHeight - height));
                         yVel += yAcc * interval;
                         yPos += yVel * interval;
                         stop = false;

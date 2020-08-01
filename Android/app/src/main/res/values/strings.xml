@@ -4,7 +4,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Lemons</string>
@@ -15,5 +15,8 @@
     <string name="processing_image">Processing Image</string>
     <string name="name_your_sheep">Name your sheep</string>
     <string name="view_flock">View Flock</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="pick_from_gallery">Pick from Gallery</string>
+    <string name="infoText">Centre the sheep in the view window then press identify.</string>
 
 </resources>

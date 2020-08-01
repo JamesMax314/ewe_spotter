@@ -27,6 +27,7 @@ public class EditImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_image);
         fragmentManagerEI = getSupportFragmentManager();
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Edit Image");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

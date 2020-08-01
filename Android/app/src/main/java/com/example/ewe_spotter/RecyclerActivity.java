@@ -38,6 +38,7 @@ public class RecyclerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("My Flock");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

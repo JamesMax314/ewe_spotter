@@ -20,9 +20,9 @@ public class EditImageFragment extends Fragment implements View.OnClickListener 
     EditImageView editImageView;
 
     Button identify_button;
-    ImageButton rotate_left;
-    ImageButton rotate_right;
-    ImageButton reset;
+    Button rotate_left;
+    Button rotate_right;
+    Button reset;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

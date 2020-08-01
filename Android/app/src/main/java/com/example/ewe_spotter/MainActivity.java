@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fragmentManager = getSupportFragmentManager();
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Ewe Spotter");
         setSupportActionBar(toolbar);
 
         if (findViewById(R.id.fragment_container) != null) {

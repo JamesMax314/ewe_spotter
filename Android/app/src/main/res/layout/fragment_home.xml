@@ -15,34 +15,52 @@
 <!--        android:layout_marginEnd="8dp"-->
 <!--        app:layout_constraintBottom_toBottomOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent">-->
+
+    <ImageView
+        android:id="@+id/sheepPic"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:src="@drawable/ic_full_sheep"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp">
+    </ImageView>
+
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/sheepPic">
 
         <Button
             android:id="@+id/herd_button"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/view_flock"
-            app:icon="@drawable/ic_icon_sheep"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+            app:icon="@drawable/ic_icon_sheep"/>
 
         <Button
             android:id="@+id/cam_button"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/ic_baseline_photo_camera_24" />
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/take_picture"
+            app:icon="@drawable/ic_baseline_photo_camera_24"
+            app:iconSize="48dp"/>
 
         <Button
             android:id="@+id/gallary_button"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/ic_baseline_image_24" />
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_from_gallery"
+            app:icon="@drawable/ic_baseline_image_24"
+            app:iconSize="48dp"/>
 
     </LinearLayout>
 

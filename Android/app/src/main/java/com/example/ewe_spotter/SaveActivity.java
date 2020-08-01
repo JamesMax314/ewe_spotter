@@ -57,6 +57,7 @@ public class SaveActivity extends AppCompatActivity {
 
         fragmentManagerSave = getSupportFragmentManager();
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Save Sheep");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

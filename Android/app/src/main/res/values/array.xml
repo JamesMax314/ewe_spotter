@@ -3,24 +3,129 @@
     <string-array name="sheep_names">
         <item>Badger Face sheep</item>
         <item>Balwen sheep</item>
+        <item>Black Welsh Mountain sheep</item>
+        <item>Border Cheviot</item>
         <item>Border Leicester sheep</item>
         <item>Castlemilk Moorit</item>
+        <item>Cheviot sheep</item>
         <item>Cotswold sheep</item>
+        <item>Dalesbred sheep</item>
+        <item>Derbyshire Gritstone sheep</item>
         <item>Devon and Cornwall Longwool</item>
+        <item>Dorset Horn sheep</item>
+        <item>Easycare sheep</item>
         <item>Eppynt Hill and Beulah Speckled Face</item>
         <item>Exmoor Horn</item>
         <item>Greyface Dartmoor</item>
         <item>Hebridean sheep</item>
         <item>Herdwick sheep</item>
+        <item>Hill Radnor sheep</item>
+        <item>Jacob sheep</item>
+        <item>Kerry Hill sheep</item>
         <item>Llanwenog sheep</item>
         <item>Lleyn sheep</item>
         <item>Lonk sheep</item>
         <item>Manx Loaghtan</item>
+        <item>Norfolk Horn sheep</item>
         <item>North Ronaldsay sheep</item>
         <item>Portland sheep</item>
+        <item>Romney sheep</item>
+        <item>Rough Fell sheep</item>
+        <item>Ryeland sheep</item>
+        <item>Scottish Black Face sheep</item>
         <item>Soay sheep</item>
         <item>Southdown sheep</item>
         <item>Suffolk sheep</item>
+        <item>Swaledale sheep</item>
+        <item>Texel sheep</item>
         <item>Wensleydale sheep</item>
+    </string-array>
+
+    <string-array name="sheep_descriptions">
+        <item>This sheep looks a bit like a big badger.</item>
+        <item>Meaning “white blaze” in Welsh,
+            the Balwen sheep is named after the distinct marking on its face.
+            Traditionally this was used by farmers to differentiate their flocks
+            from neighbouring flocks of Welsh mountain breeds.</item>
+        <item>The striking Black Welsh Mountain Sheep is self-reliant and
+            adaptable and you can expect to meet it in upland areas of Wales.</item>
+        <item>The Border Cheviot\’s reputation for being hardly and alert is no surprise
+            considering its thought to have developed from the sheep who swam to shore
+            from the wrecked ships of the Spanish Armada.</item>
+        <item>Is it a sheep or is it a rabbit? Despite looking so alert,
+            Border Leicester\’s are a docile breed of sheep.</item>
+        <item>Castlemilk Moorits were created in the 1900s to enrich
+            Sir John Buchanan Jardine\'s estate, after which they are named.</item>
+        <item>The burly Cheviot can be found up and down the UK as well as abroad.</item>
+        <item>Cotswold sheep have a reputation for being calm and friendly and are
+            thought to have originated from sheep kept on large Roman estates.</item>
+        <item>The impressive Dalesbred is indigenous to the scenic Yorkshire Dales but
+            has made its way further afield.  Its dense wool is often used to make
+            carpets and occasionally tweed.</item>
+        <item>Being one of the oldest sheep breeds in Britain, the sturdy Derbyshire Gritstone
+            is well adapted to life in the upland Peak District.</item>
+        <item>Cuddly Devon and Cornwall Longwools are said to produce
+            more wool than any other British breed.</item>
+        <item>The beautiful Dorset Horn sheep leaves no questions as to where it gets its name.
+            Its also the only British Sheep capable of breeding through winter.</item>
+        <item>The easy-going Easycare sheep was developed in the 1960s.
+            It sheds its wool in summer and requires minimal veterinary care.
+            Its shed fleece even decomposes to act as a natural soil conditioner.
+            This might be the coolest sheep around.</item>
+        <item>This is a Welsh sheep which has been bred to stand the
+            harsh weather of Mynydd Epynt, where it originated.</item>
+        <item>The Exmoor Horn descends from sheep that wandered the moors
+            of Exmoor for hundreds of years.  Despite this, breeding Exmore Horn
+            ewes only account for around 10% of all sheep on Exmoor.</item>
+        <item>The beautiful Greyface Dartmoor can be recognised by
+            its distinctive face markings.</item>
+        <item>Small yet striking, the Hebridean Sheep has bounced
+            back from near extinction in the 1970s.</item>
+        <item>The iconic hardy Herdwick can often be found enjoying
+            the Lake District with a smile on its face.</item>
+        <item>The Hill Radnor\’s beautiful brown face can almost
+            exclusively be seen in the Radnor/Brecon Beacons area of Wales.</item>
+        <item>Named after the Biblical figure of Jacob, the Jacob sheep is more closely
+            linked to sheep from Africa and South-West Asia than other British breeds.</item>
+        <item>Owing its name to the village of Kerry in Wales,
+            the Kerry Hill sheep is easily recognised by the striking
+            markings on its friendly face.</item>
+        <item>Llanwenogs are a rare breed of sheep
+            originating from West Wales\’ Teifi Valley.</item>
+        <item>The adaptable Lleyn sheep is from North-west Wales and enjoys
+            both upland and lowland grazing.</item>
+        <item>The Lonk gets its name from the word \‘lanky\’, meaning long and thin.
+            It\’s commonly found on the central and south Pennine hills.</item>
+        <item>As its name suggests, the Manx Loaghton is native to the Isle of Man.
+            Its also one of the rarest sheep in Britain.</item>
+        <item>The Norfolk Horn is one of the oldest sheep in Britain.</item>
+        <item>Named after the most Northernmost island of Orkney,
+            the original semi-feral North Ronaldsay flock feeds almost entirely on seaweed.</item>
+        <item>The Portland sheep remained isolated on the island of Portland while the rest
+            of the UK was experimenting with breed development.</item>
+        <item>New Zealand\’s impressive sheep industry is in part owed to the Romney,
+            but their hardiness means they can be found all over the world.</item>
+        <item>Rough Fells are one of the three breeds of sheep native to Cumbria as well as
+            being one of the largest mountain breeds in Britain.
+            Because of its special fleece the Rough Fell doesn\’t require housing,
+            even during the harshest of winters.</item>
+        <item>Considered to have some of the finest wool in Britain,
+            Queen Elizabeth I insisted on only wearing stockings
+            made from wool from Ryeland sheep.</item>
+        <item>The Scottish Black Face is the most common sheep breed of the United Kingdom.
+            Its friendly face makes it a welcome sight wherever you go.</item>
+        <item>Despite their delicate gazelle-like appearance,
+            Soay sheep are resilient and can survive in exceptionally
+            harsh weather conditions.</item>
+        <item>The bulky English Southdown sheep is the shorter counterpart to the original
+            Southdown breed of the United States.</item>
+        <item>The Suffolk sheep has been exported to many countries but originated
+            from the Bury St. Edmunds area of Suffolk.</item>
+        <item>Both friendly and hardy, Swaledales can often be found mooching around
+            the Yorkshire Dales, County Durham and around the Cumbrian Pennines.</item>
+        <item>Originating from the island of Texel off Holland,
+            the Texel sheep is now one of the most widespread breeds in Britain.</item>
+        <item>Though known for its much-loved cheese,
+            the Wensleydale is also blessed in the wool department.</item>
     </string-array>
 </resources>

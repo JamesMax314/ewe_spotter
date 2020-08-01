@@ -57,6 +57,7 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
         int breedID = sheepI.getBID();
         holder.setbID(breedID);
         holder.breedView.setText(res.getTextArray(R.array.sheep_names)[breedID]);
+        holder.infoLable.setText(res.getTextArray(R.array.sheep_descriptions)[breedID]);
 
         holder.setsID(sheepI.getSID());
 
@@ -74,6 +75,7 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
         ImageView sheepImageView;
         TextView nameView;
         TextView breedView;
+        TextView infoLable;
         CardView cv;
         CardView cardExt;
         Button arrowButton;
@@ -89,6 +91,7 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
             sheepImageView = (ImageView)itemView.findViewById(R.id.sheepImageView);
             nameView = (TextView)itemView.findViewById(R.id.nameView);
             breedView = (TextView)itemView.findViewById(R.id.breedView);
+            infoLable = (TextView)itemView.findViewById(R.id.infoLable);
             cv = (CardView)itemView.findViewById(R.id.cardView);
 
             cardExt = (CardView)itemView.findViewById(R.id.cardExt);

@@ -14,5 +14,6 @@
     <string name="save">Save</string>
     <string name="processing_image">Processing Image</string>
     <string name="name_your_sheep">Name your sheep</string>
+    <string name="view_flock">View Flock</string>
 
 </resources>

@@ -1,8 +1,12 @@
 package com.example.ewe_spotter;
 
+import android.Manifest;
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -10,9 +14,12 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 
@@ -27,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static final String PATH_MESSAGE = "com.example.ewe_spotter.path_method";
@@ -37,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
     public static FragmentManager fragmentManager;
     String currentPhotoPath;
 
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int CAMERA_CODE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
+
     /**
      * Create the File where the photo should go
      */
@@ -77,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+
     }
 
     public void requestGalleryActivity() {
@@ -101,7 +114,34 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intentHerd);
     }
 
-    public void requestImageActivity() {
+    public void requestImageActivity(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_CODE);
+        } else {
+            runImageActivity();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_CODE:
+                if (grantResults.length > 0) {
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (cameraAccepted) {
+                        runImageActivity();
+                    } else {
+                        Toast.makeText(MainActivity.this,
+                                "Permission to access Camera denied",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        }
+    }
+
+    public void runImageActivity() {
         // Called when cam button pressed; stages intent for image capture
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 

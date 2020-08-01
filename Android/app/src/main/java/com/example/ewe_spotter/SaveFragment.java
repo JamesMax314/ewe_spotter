@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 public class SaveFragment extends Fragment implements View.OnClickListener {
     public TextView breedText;
+    public TextView infoText;
     public String nameText;
     private EditText nameEdit;
 
@@ -30,6 +31,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         release_button.setOnClickListener(this);
 
         breedText = view.findViewById(R.id.breedText);
+        infoText = view.findViewById(R.id.infoView);
         return view;
     }
 
@@ -39,6 +41,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         Resources res = getResources();
         int breedId = ((SaveActivity) requireActivity()).bID;
         breedText.setText(res.getTextArray(R.array.sheep_names)[breedId]);
+        infoText.setText(res.getTextArray(R.array.sheep_descriptions)[breedId]);
         nameEdit = requireView().findViewById(R.id.sheepName);
 
         String name = ((SaveActivity) requireActivity()).getNameString();

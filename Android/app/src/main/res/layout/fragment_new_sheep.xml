@@ -39,12 +39,12 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="@string/name_your_sheep"
+                android:hint="@string/name_your_sheep"
                 android:layout_margin="@dimen/margin"
                 app:layout_constraintTop_toBottomOf="@id/sheepView"/>
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/infoView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"

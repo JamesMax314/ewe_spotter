@@ -128,7 +128,7 @@ public class SheepNet{
     }
 
     protected String getModelPath() {
-        return "m5.tflite";
+        return "m7_fullSheep.tflite";
     }
 
 //    protected String getLabelPath() {

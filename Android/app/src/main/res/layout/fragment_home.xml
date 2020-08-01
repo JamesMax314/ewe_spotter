@@ -26,9 +26,11 @@
 
         <Button
             android:id="@+id/herd_button"
-            android:layout_width="200dp"
-            android:layout_height="140dp"
-            android:background="@drawable/ic_icon_sheep" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_flock"
+            app:icon="@drawable/ic_icon_sheep"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
         <Button
             android:id="@+id/cam_button"

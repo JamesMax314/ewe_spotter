@@ -1,5 +1,6 @@
 package com.example.ewe_spotter;
 
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 public class SaveFragment extends Fragment implements View.OnClickListener {
@@ -58,9 +61,31 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                 ((SaveActivity) requireActivity()).save(nameText);
                 break;
             case R.id.release_button:
-                ((SaveActivity) requireActivity()).release();
+                confirmRelease();
                 break;
         }
+    }
+
+    private void confirmRelease(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
+        alertDialogBuilder.setMessage(R.string.sure);
+                alertDialogBuilder.setPositiveButton(R.string.yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                ((SaveActivity) requireActivity()).release();
+                            }
+                        });
+
+        alertDialogBuilder.setNegativeButton(R.string.no,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void getImage(View view){

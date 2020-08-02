@@ -38,7 +38,7 @@ public class RecyclerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("My Flock");
+        toolbar.setTitle(R.string.Flock);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -54,7 +54,7 @@ public class RecyclerActivity extends AppCompatActivity {
     private void fillRecycler(){
         for (int i=0; i<sheepList.size(); i++){
             Sheep sheepIndv = sheepList.get(i);
-            Log.i(TAG, "Sheep Names: " + sheepIndv.getSheepName());
+            Log.i(TAG, R.string.Sheep_Names + sheepIndv.getSheepName());
         }
 
         progressBar.setVisibility(View.GONE);

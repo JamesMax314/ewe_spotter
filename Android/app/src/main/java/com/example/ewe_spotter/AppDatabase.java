@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Sheep.class}, version = 2)
+@Database(entities = {Sheep.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract SheepDAO sheepDAO();
     private static final String DB_NAME = "app_db";

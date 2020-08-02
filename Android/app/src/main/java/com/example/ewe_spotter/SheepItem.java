@@ -1,9 +1,10 @@
 package com.example.ewe_spotter;
 
 public class SheepItem {
+    private String date;
     private String sheepName;
     private String photoPath;
-    private String sheepBreed;
+    private int sheepBreed;
 
     public String getSheepName() {
         return sheepName;
@@ -21,11 +22,19 @@ public class SheepItem {
         this.photoPath = photoPath;
     }
 
-    public String getSheepBreed() {
+    public int getSheepBreed() {
         return sheepBreed;
     }
 
     public void setSheepBreed(int breedID) {
-        this.sheepBreed = sheepBreed;
+        this.sheepBreed = breedID;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

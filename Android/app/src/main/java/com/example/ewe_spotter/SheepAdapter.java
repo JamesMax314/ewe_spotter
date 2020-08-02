@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,13 +50,14 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
         Resources res = activity.getResources();
 
         holder.nameView.setText(sheepI.getSheepName());
+        holder.dateView.setText(sheepI.getDate());
 
         holder.setPhotoPath(sheepI.getPhotoPath());
 
         int breedID = sheepI.getBID();
         holder.setbID(breedID);
         holder.breedView.setText(res.getTextArray(R.array.sheep_names)[breedID]);
-        holder.infoLable.setText(res.getTextArray(R.array.sheep_descriptions)[breedID]);
+        holder.infoLabel.setText(res.getTextArray(R.array.sheep_descriptions)[breedID]);
 
         holder.setsID(sheepI.getSID());
 
@@ -75,7 +75,8 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
         ImageView sheepImageView;
         TextView nameView;
         TextView breedView;
-        TextView infoLable;
+        TextView dateView;
+        TextView infoLabel;
         CardView cv;
         CardView cardExt;
         Button arrowButton;
@@ -91,7 +92,8 @@ public class SheepAdapter extends RecyclerView.Adapter<SheepAdapter.ViewHolder> 
             sheepImageView = (ImageView)itemView.findViewById(R.id.sheepImageView);
             nameView = (TextView)itemView.findViewById(R.id.nameView);
             breedView = (TextView)itemView.findViewById(R.id.breedView);
-            infoLable = (TextView)itemView.findViewById(R.id.infoLable);
+            dateView = (TextView)itemView.findViewById(R.id.dateView);
+            infoLabel = (TextView)itemView.findViewById(R.id.infoLable);
             cv = (CardView)itemView.findViewById(R.id.cardView);
 
             cardExt = (CardView)itemView.findViewById(R.id.cardExt);

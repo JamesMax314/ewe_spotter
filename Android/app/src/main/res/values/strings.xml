@@ -18,5 +18,13 @@
     <string name="take_picture">Take Picture</string>
     <string name="pick_from_gallery">Pick from Gallery</string>
     <string name="infoText">Centre the sheep in the view window then press identify.</string>
+    <string name="sure">"Are you sure, You want to permanently delete this sheep?"</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="Identifying">Identifying Sheep...</string>
+    <string name="Save">Save Sheep</string>
+    <string name="Edit">Edit Image</string>
+    <string name="Flock">My Flock</string>
+    <string name="Sheep_Names">Sheep Names: </string>
 
 </resources>

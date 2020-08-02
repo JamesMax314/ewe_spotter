@@ -35,7 +35,7 @@ public class IDActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_i_d);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Identifying Sheep...");
+        toolbar.setTitle(R.string.Identifying);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

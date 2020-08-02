@@ -7,10 +7,11 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Sheep {
 
-    public Sheep(int bID, String photoPath, String sheepName) {
+    public Sheep(int bID, String photoPath, String sheepName, String date) {
         this.bID = bID;
         this.photoPath = photoPath;
         this.sheepName = sheepName;
+        this.date = date;
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -24,6 +25,9 @@ public class Sheep {
 
     @ColumnInfo(name = "sheep_name")
     private String sheepName;
+
+    @ColumnInfo(name = "date")
+    private String date;
 
     public int getSID() {
         return sID;
@@ -55,5 +59,13 @@ public class Sheep {
 
     public void setSheepName(String sheepName) {
         this.sheepName = sheepName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

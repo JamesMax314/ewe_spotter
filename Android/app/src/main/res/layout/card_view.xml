@@ -94,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/sheepImageView"
-                app:cardBackgroundColor="@color/haze">
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/infoLable"

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.text.SimpleDateFormat;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class SaveActivity extends AppCompatActivity {
     private static final String TAG = "SaveActivity";
@@ -57,7 +59,7 @@ public class SaveActivity extends AppCompatActivity {
 
         fragmentManagerSave = getSupportFragmentManager();
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Save Sheep");
+        toolbar.setTitle(R.string.save);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -112,7 +114,10 @@ public class SaveActivity extends AppCompatActivity {
         if (sID != -1){
             sheepInstance.setSheepName(name);
         } else {
-            sheepInstance = new Sheep(bID, photoPath, name);
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            String date = dateFormat.format(calendar.getTime());
+            sheepInstance = new Sheep(bID, photoPath, name, date);
         }
         dbRunnable runnable = new dbRunnable(SAVE);
         new Thread(runnable).start();

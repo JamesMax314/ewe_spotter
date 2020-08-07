@@ -20,7 +20,7 @@
         android:id="@+id/sheepPic"
         android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:src="@drawable/ic_full_sheep"
+        android:src="@drawable/ic_full_sheep_v2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="50dp">
